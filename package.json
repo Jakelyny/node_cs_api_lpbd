@@ -1,0 +1,24 @@
+{
+  "name": "node_cs_api_lpbd",
+  "version": "1.0.0",
+  "description": "pacote para a disciplina de lpbd 2021/1",
+  "main": "index.js",
+  "scripts": {
+    "test": "enter"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jakelyny/node_cs_api_lpbd.git"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "express"
+  ],
+  "author": "Jakelyny",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jakelyny/node_cs_api_lpbd/issues"
+  },
+  "homepage": "https://github.com/Jakelyny/node_cs_api_lpbd#readme"
+}
