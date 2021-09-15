@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/Jakelyny/node_cs_api_lpbd/issues"
   },
-  "homepage": "https://github.com/Jakelyny/node_cs_api_lpbd#readme"
+  "homepage": "https://github.com/Jakelyny/node_cs_api_lpbd#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1"
+  }
 }
