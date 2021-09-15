@@ -28,10 +28,10 @@ sw.use(function(req, res, next){
 
 //definição do primeiro serviço web.
 sw.get('/', (req, res) => {
-    res.send('Hello, world! Meu primeiro teste.');
+    res.send('Hello, world! Olá, eu sou um teste ! !');
 });
 
-
+//definição da porta
 sw.listen(4000, function(){
     console.log('Server is running.. on Port 4000');
 });
