@@ -28,7 +28,7 @@ sw.use(function(req, res, next){
 
 //definição do primeiro serviço web.
 sw.get('/', (req, res) => {
-    res.send('Hello, world! Olá, eu sou um teste ! !');
+    res.send('HELLOO, WORLD! Olá, eu sou um teste ! ! !');
 });
 
 //definição da porta
