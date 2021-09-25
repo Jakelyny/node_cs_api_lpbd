@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <title>Tabela Arma</title>
+</head>
+
+<body>
+    <audio preload="metadata" autoplay loop>
+        <source src="WoW-Vanilla to Shadowlands.mp3" type="audio/mpeg">
+        <source src="WoW-Vanilla to Shadowlands.ogg" type="audio/ogg">
+    </audio>
+    <img src="img/banner.png" alt="Papel de parede com o símbolo das duas equipes">
+    <div id="app" class="container">
+        <div class="style">
+            <h2>Listagem de armas</h2>
+
+            <table class="table table-striped">
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Preço</th>
+                    <th scope="col">Tipo de Arma</th>
+                    <th scope="col">Munição</th>
+                    <th scope="col">Alterar</th>
+                    <th scope="col">Remover</th>
+                </tr>
+                <tbody>
+                    <!--v-for responsável na leitura das armas já cadastradas no "armas"-->
+                    <tr v-for="(a, indice) in armas">
+                        <td>{{a.codigoArma}}</td>
+                        <td>{{a.nome}}</td>
+                        <td>{{a.preco}}</td>
+                        <td>{{a.tipoArmas.descricao}}</td>
+                        <td>{{a.municao.descricao}}</td>
+                        <td><button @click.prevent="editArma(indice)" class="btn" type="button">Alterar</button></td>
+                        <td><button @click.prevent="remArma(indice)" class="btn" type="button">Remover</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <form id="formulario" class="colorFonts">
+            <hr>
+            <h3>Formulário para cadastrar novas armas</h3>
+            <hr>
+            <!-- Surgirá caso ocora alguma falha no cadastro para que ocorra a inserção correta-->
+            <p v-if="errors.length">
+                <b>&#9940 Ops, para conseguir cadastrar corrija o(s) seguinte(s) erro(s) &#9940</b>
+            <ul>
+                <!--V-for responsável em percorrer todos os possíveis erros e efetuar sua leitura-->
+                <li v-for="error in errors">{{ error }}</li>
+            </ul>
+            </p>
+            <div class="form-group" hidden>
+                <label for="inputIndice">#:</label>
+                <input type="number" v-model="form_arma.indice" class="form-control" id="inputIndice" disabled>
+            </div>
+
+            <!-- Input do código, no mínimo necessário inserir dois dígitos e no máximo 5, do tipo number com uma verificação para não permitir a passagem de letras-->
+            <div class="form-group">
+                <label for="inputCodigo">Código:</label>
+                <input type="text" minlength="2" maxlength="5" v-model="form_arma.codigoArma" @input="checkCodigo"
+                    class="form-control" id="inputCodigoArma" required placeholder="Ex: 243">
+            </div>
+
+            <!-- Input do nome, no mínimo necessário inserir dois dígitos e no máximo 12, do tipo text pois existe nome de armas com números e letras-->
+            <div class="form-group">
+                <label for="inputNome">Nome:</label>
+                <input type="text" minlength="2" maxlength="12" v-model="form_arma.nome" class="form-control"
+                    id="inputNome" required placeholder="Ex: AK-47">
+            </div>
+
+            <!-- Input do preço, no mínimo necessário inserir quatro dígitos e no máximo 10, do tipo number com uma verificação para não permitir a passagem de letras-->
+            <div class="form-group">
+                <label for="inputPreco">Preço:</label>
+                <input type="text" minlength="4" maxlength="10" v-model="form_arma.preco" @input="checkPreco"
+                    class="form-control" id="inputPreco" required placeholder="Ex: 2700,00 (acima de R$200,00)">
+            </div>
+
+            <!-- Select do tipo de arma utilizando um v-for que percorrer entre as opções cadastradas utilizando o t-->
+            <div class="form-group">
+                <label for="selectTipoArmas">Tipo de Arma:</label>
+                <select v-model="form_arma.tipoArmas" class="form-control" id="selectTipoArmas" required>
+                    <option disabled value="">Escolha um tipo</option>
+                    <option v-for="t in tipoArmas" v-bind:value="t">
+                        {{ t.descricao }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Select de munição utilizando um v-for que percorrer entre as opções cadastradas utilizando o c-->
+            <div class="form-group">
+                <label for="selectMunicao">Munição:</label>
+                <select v-model="form_arma.municao" class="form-control" id="selectMunicao" required>
+                    <option disabled value="">Escolha um tipo</option>
+                    <option v-for="c in municao" v-bind:value="c">
+                        {{ c.descricao }}
+                    </option>
+                </select>
+            </div>
+            <div class="alinha">
+                <!-- https://getbootstrap.com/docs/4.0/components/forms/ -->
+
+                <button @click.prevent="addArma" class="btn btn-primary" type="button" id="btnStyle">Salvar</button>
+                <button @click.prevent="cleanFormulario" class="btn btn-primary" type="button"
+                    id="btnStyle">Limpar</button>
+                <hr>
+            </div>
+        </form>
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var dados = {
+            //Opções cadastradas do select do tipo de armas
+            tipoArmas: [{ codigo: 1, descricao: 'Pistola' }, { codigo: 2, descricao: 'Submetralhadora' }, { codigo: 3, descricao: 'Rifle' }, { codigo: 4, descricao: 'Arma pesada' }],
+
+            //Opções cadastradas do select do tipo de munição
+            municao: [{ codigo: 1, descricao: '9mm Parabellum' }, { codigo: 2, descricao: '.45 ACP' }, { codigo: 3, descricao: '.357 SIG' }, { codigo: 4, descricao: '.50 Action Express' }, { codigo: 5, descricao: '5,7x28mm' }, { codigo: 6, descricao: '12 Gauge' }, { codigo: 7, descricao: '5,56 NATO' }, { codigo: 8, descricao: '7,62 NATO' }, { codigo: 9, descricao: '7,62x39mm' }, { codigo: 10, descricao: '.338 Lapua Magnum' }, { codigo: 11, descricao: '5,56 Parabellum' }],
+
+            //Utilizado para listar as armas na tabela e armazenagem do LocalStorage
+            armas: [],
+
+            //Utilizado para os inputs do formulário
+            form_arma: { indice: '', codigoArma: '', nome: '', preco: '', tipoArmas: {}, municao: {} },
+
+            //Utilizado para os possíveis erros
+            errors: []
+
+        };
+
+        //Inicio do LocalStorage, para manter as informações armazenadas no browser, utilizando a chave 'Arma' para a armazenação
+        dados.armas = localStorage.getItem('Arma');
+        //passagem da informação para o JSON
+        dados.armas = JSON.parse(dados.armas);
+
+        new Vue({
+            el: '#app',
+            data: dados,
+            methods: {
+
+                addArma: function () {
+
+                    //para que possa prosseguir adicoonando é necessário passartrue pelo checkForm
+                    if (this.checkForm()) {
+
+                        var input_indice = this.form_arma.indice;
+                        var input_codigoArma = this.form_arma.codigoArma;
+                        var input_nome = this.form_arma.nome.trim();
+                        var input_preco = this.form_arma.preco;
+                        var select_tipoArmas = this.form_arma.tipoArmas;
+                        var select_municao = this.form_arma.municao;
+
+                        if (isNaN(parseInt(input_indice))) {
+
+                            //caso o LocalStorage esteja vazio ele cria um vetor vazio para realocar a informação
+                            if (this.armas == null) {
+                                this.armas = [];
+                            }
+                            this.armas.push({
+                                codigoArma: input_codigoArma,
+                                nome: input_nome.trim(),
+                                preco: input_preco,
+                                tipoArmas: select_tipoArmas,
+                                municao: select_municao
+                            }
+                            );
+                            alert('Nova arma cadastrada !');
+                            //adição no formato JSON no LocalStorage
+                            localStorage.setItem('Arma', JSON.stringify(this.armas));
+                            this.cleanFormulario();
+
+                        } else {
+
+                            this.armas[input_indice] =
+                            {
+                                codigoArma: input_codigoArma,
+                                nome: input_nome.trim(),
+                                preco: input_preco,
+                                tipoArmas: select_tipoArmas,
+                                municao: select_municao
+                            };
+
+                            alert('Arma alterada !');
+                            //atualização no formato JSON no LocalStorage
+                            localStorage.setItem('Arma', JSON.stringify(this.armas));
+                            this.cleanFormulario();
+                        }
+                    }
+                },
+
+                editArma: function (param_index) {
+
+                    this.form_arma.indice = param_index;
+                    this.form_arma.codigoArma = this.armas[param_index].codigoArma;
+                    this.form_arma.nome = this.armas[param_index].nome;
+                    this.form_arma.preco = this.armas[param_index].preco;
+                    this.form_arma.tipoArmas = this.armas[param_index].tipoArmas;
+                    this.form_arma.municao = this.armas[param_index].municao;
+                },
+
+                //limpeza do formulário por meio do form_arma
+                cleanFormulario: function () {
+
+                    this.form_arma.indice = '';
+                    this.form_arma.codigoArma = '';
+                    this.form_arma.nome = '';
+                    this.form_arma.preco = '';
+                    this.form_arma.tipoArmas = '';
+                    this.form_arma.municao = '';
+                },
+
+                remArma: function (param_index) {
+
+                    var r = confirm("Você deseja mesmo remover?");
+                    if (r == true) {
+                        //caso o usuário aceite ocorre a remoção pelo index
+                        this.armas.splice(param_index, 1);
+
+                        //ocorre sua atualização no LocalStorage igualmente
+                        localStorage.setItem('Arma', JSON.stringify(this.armas));
+                        this.cleanFormulario();
+                        alert('Removeu a arma: ' + param_index);
+                    } else {
+                        alert("Remoção cancelada!");
+                    }
+                },
+
+                checkForm: function (e) {
+
+                    this.errors = [];
+                    //tratamento das informações corretadas
+                    if (this.form_arma.codigoArma > 2 && this.form_arma.nome.trim().length > 2 && this.form_arma.preco >= 199 && !isNaN(parseInt(this.form_arma.tipoArmas.codigo)) && !isNaN(parseInt(this.form_arma.municao.codigo))) {
+
+                        return true;
+                    }
+                    this.errors = [];
+
+                    //Possíveis mensagens de erro por tipo de input e tratamento
+                    if (this.form_arma.codigoArma < 2) {
+                        this.errors.push('Código pequeno! Necessário acima de 2 dígitos.');
+                    }
+                    if (this.form_arma.nome.trim().length < 2) {
+                        this.errors.push('Nome da arma é obrigatório.');
+                    }
+                    if (this.form_arma.preco <= 199) {
+                        this.errors.push('O preço precisa ser acima ou igual a R$200,00');
+                    }
+                    if (isNaN(parseInt(this.form_arma.municao.codigo))) {
+                        this.errors.push('O tipo de munição é obrigatório.');
+                    }
+                    if (isNaN(parseInt(this.form_arma.tipoArmas.codigo))) {
+                        this.errors.push('O tipo de arma é obrigatório.');
+                    }
+
+                },
+
+                //função responsável em deixar somente a passagem de números, ambas fazem suas funções, porém apresentam erro no console, mesmo fazendo sua função...
+                checkCodigo: function (event) {
+
+                    this.form_arma.codigoArma = this.form_arma.codigoArma.replace(/[^0-9]/g, '');
+
+                },
+                checkPreco: function (event) {
+
+                    this.form_arma.preco = this.form_arma.preco.replace(/[^0-9]/g, '');
+
+                },
+
+            },
+        });
+    });
+
+</script>
+
+</html>
