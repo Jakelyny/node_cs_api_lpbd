@@ -13,12 +13,12 @@ npm install --save express
 npm install --save pg
 */
 
-var express = require('express'); // requisita a biblioteca para a criacao dos serviços web.
-var pg = require("pg"); // requisita a biblioteca pg para a comunicacao com o banco de dados.
+var express = require('express'); // Requisita a biblioteca para a criação dos serviços web.
+var pg = require("pg"); // Requisita a biblioteca pg para a comunicação com o banco de dados.
 
-var sw = express(); // iniciliaza uma variavel chamada app que possitilitará a criação dos serviços e rotas.
+var sw = express(); //  Iniciliaza uma variavel chamada app que possitilitará a criação dos serviços e rotas.
 
-sw.use(express.json());//padrao de mensagens em json.
+sw.use(express.json());//  Padrao de mensagens em JSON.
 
 sw.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -35,7 +35,7 @@ const config = {
     port: 5432
 };
 
-//definia conexao com o banco de dados.
+//define conexao com o banco de dados.
 const postgres = new pg.Pool(config);
 
 sw.get('/listpatente', function (req, res) {
