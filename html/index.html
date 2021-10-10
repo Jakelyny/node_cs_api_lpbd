@@ -227,6 +227,75 @@
                     } 
                 },
 
+                created: function () {
+
+                    this.$http.get('http://localhost:4000/listarma')
+
+                        .then(response => {
+
+                            for (let a of response.data) {
+
+                                this.armas.push({
+                                    codigo: a.codigo,
+                                    nome: a.nome,
+                                    preco: a.preco,
+                                    tipoArmas: {codigo: a.nome},
+                                    municao: {codigo: a.nome}
+                                }
+                                );
+
+                            }
+
+                        }).catch(response => {
+                            // error callback
+                            alert('Não conectou no serviço: listarma');
+                            console.log(response);
+                        });
+
+
+                    //requisitar o serviço /listtipoarma     
+                    this.$http.get('http://localhost:4000/listtipoarma')
+
+                        .then(response => {
+
+                            for (let t of response.data) {
+
+                                this.tipoArmas.push({
+                                    nome: t.nome
+                                }
+                                );
+
+                            }
+
+                        }).catch(response => {
+                            // error callback
+                            alert('Não conectou no serviço: listtipoarma');
+                            console.log(response);
+                        });
+
+                    //requisitar o serviço /listmunicao 
+                    this.$http.get('http://localhost:4000/listmunicao')
+
+                        .then(response => {
+
+                            for (let m of response.data) {
+
+                                this.municao.push({
+                                    nome: m.nome
+                                }
+                                );
+
+                            }
+
+                        }).catch(response => {
+                            // error callback
+                            alert('Não conectou no serviço: listmunicao');
+                            console.log(response);
+                        });
+
+
+                },
+
                 checkForm: function (e) {
 
                     this.errors = [];
@@ -256,7 +325,7 @@
 
                 },
 
-                //função responsável em deixar somente a passagem de números, ambas fazem suas funções, porém apresentam erro no console, mesmo fazendo sua função...
+                //função responsável em deixar somente a passagem de números...
                 checkCodigo: function (event) {
 
                     this.nova_arma.codigoArma = this.nova_arma.codigoArma.replace(/[^0-9]/g, '');
