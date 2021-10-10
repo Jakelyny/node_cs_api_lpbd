@@ -103,7 +103,7 @@ sw.get('/listarma', function (req, res) {
             res.status(400).send('{' + err + '}');
         } else {
 
-            client.query('SELECT a.codigo, a.nome, a.preco, t.nome, m.nome FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo;', function (err, result) { //Comando SQL SELECT
+            client.query('SELECT a.codigo, a.nome, a.preco, t.nome, m.nome FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo', function (err, result) { //Comando SQL SELECT
                 done();   //Encerrando conexão.
                 if (err) {
                     console.log(err);
@@ -127,7 +127,7 @@ sw.post('/insertarma', function (req, res, next) {
         } else {
 
             var q = {
-                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5, now());', values: [req.body.codigo, req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo]
+                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5, now())', values: [req.body.codigo, req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo]
             }
             console.log(q);
 
@@ -148,7 +148,7 @@ sw.post('/insertarma', function (req, res, next) {
     });
 });
 
-sw.post('/updatejogador/', (req, res) => {
+sw.post('/updatearma/', (req, res) => {
 
     postgres.connect(function (err, client, done) {
         if (err) {
@@ -159,7 +159,7 @@ sw.post('/updatejogador/', (req, res) => {
         } else {
 
             var q = {
-                text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 	WHERE codigo = $5;',
+                text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 	WHERE codigo = $5',
                 values: [req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo, req.body.codigo]
             }
             console.log(q);
@@ -167,7 +167,7 @@ sw.post('/updatejogador/', (req, res) => {
             client.query(q, function (err, result) {
                 done();   //Encerrando conexão.
                 if (err) {
-                    console.log("Erro no updatejogador: " + err);
+                    console.log("Erro no updatearma: " + err);
                     res.status(400).send('{' + err + '}');
                 } else {
                     res.status(200).send(req.body.nome);//se não realizar o send nao finaliza o client nao finaliza
@@ -177,11 +177,11 @@ sw.post('/updatejogador/', (req, res) => {
     });
 });
 
-sw.get('/deletejogador/:nickname', (req, res) => {
+sw.get('/deletearma/:codigo', (req, res) => {
 
     postgres.connect(function (err, client, done) {
         if (err) {
-            console.log("Não conseguiu acessar o serviço deletejogador!" + err);
+            console.log("Não conseguiu acessar o serviço deletearma!" + err);
             res.status(400).send('{' + err + '}');
         } else {
 
@@ -196,7 +196,7 @@ sw.get('/deletejogador/:nickname', (req, res) => {
                     console.log(err);
                     res.status(400).send('{' + err + '}');
                 } else {
-                    res.status(200).send({ 'Nome da arma': req.params.nome });//retorna o nickname deletado.
+                    res.status(200).send({ 'Código da arma': req.params.codigo });//retorna o nickname deletado.
                 }
 
             });
