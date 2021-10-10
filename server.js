@@ -13,41 +13,50 @@ npm install --save express
 npm install --save pg
 */
 
-var express = require('express'); //Requisita a biblioteca para a criação dos serviços web.
-var pg = require("pg"); //Requisita a biblioteca pg para a comunicação com o banco de dados.
+//Requisita a biblioteca para a criação dos serviços web.
+var express = require('express'); 
 
-var sw = express(); //Iniciliaza uma variavel chamada app que possitilitará a criação dos serviços e rotas.
+//Requisita a biblioteca pg para a comunicação com o banco de dados.
+var pg = require("pg"); 
 
-sw.use(express.json());//Padrao de mensagens em JSON.
+//Iniciliaza uma variavel chamada app que possitilitará a criação dos serviços e rotas.
+var sw = express(); 
 
-sw.use(function (req, res, next) {      //Definições de termos de segurança
-    res.header('Access-Control-Allow-Origin', '*');  //Essa passagem do asterisco significa que vai permitir o acesso do serviço por qualquer outra fonte por ser uma rede interna.
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');  //Ligações de cabeçalho.
-    res.header('Access-Control-Allow-Methods', 'GET,POST');  //Permissão dos métodos, aqui no caso o GET e o POST.
+//Padrao de mensagens em JSON.
+sw.use(express.json());
+
+sw.use(function (req, res, next) {      //Definições de termos de segurança.
+
+    //Essa passagem do asterisco significa que vai permitir o acesso do serviço por qualquer outra fonte por ser uma rede interna.
+    res.header('Access-Control-Allow-Origin', '*');  
+    //Ligações de cabeçalho.
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');  
+    //Permissão dos métodos, aqui no caso o GET e o POST.
+    res.header('Access-Control-Allow-Methods', 'GET,POST');  
     next();
 });
 
 const config = {
-    host: 'localhost',
-    user: 'postgres',
-    database: 'db_cs_lpbd_2020_2',
-    password: '123456',
-    port: 5432
+    host: 'localhost',                  //IP ou nome da máquina.
+    user: 'postgres',                   //Usuário postgres.
+    database: 'CounterStrike',          //Nome da base de dados que estabelecerá a comunicação.
+    password: 'nini',                   //A senha do usuário postgres.
+    port: 5432                          //A porta.
 };
 
 const postgres = new pg.Pool(config);  //Define conexao com o banco de dados.
 
-sw.get('/listpatente', function (req, res) {  //Requisição e respostas
+sw.get('/listtipoarma', function (req, res) {  //Requisição e respostas da listagem de tipo arma.
 
-    postgres.connect(function (err, client, done) {
+    postgres.connect(function (err, client, done) {  //Passagem de parâmetros de erros, comandos SQL e finalização do comando.
 
-        if (err) {
+        if (err) {  //Teste da variável 'err'
 
             console.log("Não conseguiu acessar o BD :" + err);
-            res.status(400).send('{' + err + '}');
+            res.status(400).send('{' + err + '}');  //Passagem do protocolo HTTP 400 de erro
         } else {
-            client.query('SELECT p.codigo, p.nome FROM tb_patente p order by p.codigo asc', function (err, result) {
-                done(); // closing the connection;
+            client.query('SELECT t.codigo, t.nome FROM tb_tipo_arma t ORDER BY t.codigo', function (err, result) {
+                done();   //Encerrando conexão.
                 if (err) {
                     console.log(err);
                     res.status(400).send('{' + err + '}');
@@ -60,6 +69,28 @@ sw.get('/listpatente', function (req, res) {  //Requisição e respostas
     });
 });
 
+sw.get('/listmunicao', function (req, res) {  //Requisição e respostas da listagem da munição.
+
+    postgres.connect(function (err, client, done) {  //Passagem de parâmetros de erros, comandos SQL e finalização do comando.
+
+        if (err) {  //Teste da variável 'err'.
+
+            console.log("Não conseguiu acessar o BD :" + err);
+            res.status(400).send('{' + err + '}');  //Passagem do protocolo HTTP 400 de erro.
+        } else {
+            client.query('SELECT m.codigo, m.nome FROM tb_municao m ORDER BY m.codigo', function (err, result) {
+                done();   //Encerrando conexão.
+                if (err) {
+                    console.log(err);
+                    res.status(400).send('{' + err + '}');
+                } else {
+                    res.status(200).send(result.rows);
+                }
+
+            });
+        }
+    });
+});
 
 //definindo um serviço web, que estará acessível pelo endereço http://localhost:4000/listjogador
 sw.get('/listjogador', function (req, res) {
@@ -74,7 +105,7 @@ sw.get('/listjogador', function (req, res) {
 
             client.query('SELECT j.nickname, to_char(j.data_nascimento, \'yyyy-mm-dd\') as data_nascimento,  j.qtd_estrela, p.codigo, p.nome, p.descricao, j.senha, to_char(j.data_cadastro, \'yyyy-mm-dd\') as data_cadastro FROM tb_jogador j, tb_patente p where j.patente_codigo=p.codigo order by j.data_cadastro asc', function (err, result) {
 
-                done(); // closing the connection;
+                done();   //Encerrando conexão.
                 if (err) {
 
                     console.log(err);
@@ -108,7 +139,7 @@ sw.post('/insertjogador', function (req, res, next) {
             console.log(q);
 
             client.query(q, function (err, result) {
-                done(); // closing the connection;
+                done();   //Encerrando conexão.
                 if (err) {
                     console.log('retornou 400 no insert');
                     console.log(err);
@@ -141,7 +172,7 @@ sw.post('/updatejogador/', (req, res) => {
             console.log(q);
 
             client.query(q, function (err, result) {
-                done(); // closing the connection;
+                done();   //Encerrando conexão.
                 if (err) {
                     console.log("Erro no updatejogador: " + err);
                     res.status(400).send('{' + err + '}');
@@ -167,7 +198,7 @@ sw.get('/deletejogador/:nickname', (req, res) => {
             }
 
             client.query(q, function (err, result) {
-                done(); // closing the connection;
+                done();   //Encerrando conexão.
                 if (err) {
                     console.log(err);
                     res.status(400).send('{' + err + '}');
@@ -181,12 +212,12 @@ sw.get('/deletejogador/:nickname', (req, res) => {
 
 });
 
-//definicao do primeiro serviço web.
-sw.get('/', (req, res) => {                               
-    res.send('Hello, world! meu primeiro teste.  #####');
+//Definicao do primeiro serviço web.
+sw.get('/', (req, res) => {
+    res.send('HELLO, WORLD! Olá, eu sou um teste ! ! !');
 })
 
 //Inicialização do serviço utilizando a porta 4000.
-sw.listen(4000, function () {                             
+sw.listen(4000, function () {
     console.log('Server is running.. on Port 4000');
 });
