@@ -55,7 +55,7 @@ sw.get('/listtipoarma', function (req, res) {  //Requisição e respostas da lis
             console.log("Não conseguiu acessar o BD :" + err);
             res.status(400).send('{' + err + '}');  //Passagem do protocolo HTTP 400 de erro
         } else {
-            client.query('SELECT t.codigo, t.nome FROM tb_tipo_arma t ORDER BY t.codigo', function (err, result) {
+            client.query('SELECT t.codigo, t.nome FROM tb_tipo_arma t ORDER BY t.codigo', function (err, result) { //Comando SQL SELECT
                 done();   //Encerrando conexão.
                 if (err) {
                     console.log(err);
@@ -78,7 +78,7 @@ sw.get('/listmunicao', function (req, res) {  //Requisição e respostas da list
             console.log("Não conseguiu acessar o BD :" + err);
             res.status(400).send('{' + err + '}');  //Passagem do protocolo HTTP 400 de erro.
         } else {
-            client.query('SELECT m.codigo, m.nome FROM tb_municao m ORDER BY m.codigo', function (err, result) {
+            client.query('SELECT m.codigo, m.nome FROM tb_municao m ORDER BY m.codigo', function (err, result) { //Comando SQL SELECT
                 done();   //Encerrando conexão.
                 if (err) {
                     console.log(err);
@@ -93,7 +93,7 @@ sw.get('/listmunicao', function (req, res) {  //Requisição e respostas da list
 });
 
 //definindo um serviço web, que estará acessível pelo endereço http://localhost:4000/listjogador
-sw.get('/listjogador', function (req, res) {
+sw.get('/listarma', function (req, res) {
 
     postgres.connect(function (err, client, done) {
 
@@ -103,38 +103,31 @@ sw.get('/listjogador', function (req, res) {
             res.status(400).send('{' + err + '}');
         } else {
 
-            client.query('SELECT j.nickname, to_char(j.data_nascimento, \'yyyy-mm-dd\') as data_nascimento,  j.qtd_estrela, p.codigo, p.nome, p.descricao, j.senha, to_char(j.data_cadastro, \'yyyy-mm-dd\') as data_cadastro FROM tb_jogador j, tb_patente p where j.patente_codigo=p.codigo order by j.data_cadastro asc', function (err, result) {
-
+            client.query('SELECT a.codigo, a.nome, a.preco, t.nome, m.nome FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo;', function (err, result) { //Comando SQL SELECT
                 done();   //Encerrando conexão.
                 if (err) {
-
                     console.log(err);
-
                     res.status(400).send('{' + err + '}');
 
                 } else {
-
-                    res.status(200).send(result.rows);//retorna para o requisitante a lista de registro(s) encontrado(s) pelo comando select.
+                    res.status(200).send(result.rows); //Retorna para o requisitante a lista de registro(s) encontrado(s) pelo comando SELECT.
                 }
-
             });
         }
     });
 });
 
-sw.post('/insertjogador', function (req, res, next) {
+sw.post('/insertarma', function (req, res, next) {
 
     postgres.connect(function (err, client, done) {
 
         if (err) {
-
             console.log("Nao conseguiu acessar o  BD " + err);
             res.status(400).send('{' + err + '}');
         } else {
 
             var q = {
-                text: 'insert into tb_jogador (nickname, data_nascimento, senha, patente_codigo, qtd_estrela, data_cadastro) values ($1,$2,$3,$4,$5, now())',
-                values: [req.body.nickname, req.body.data_nascimento, req.body.senha, req.body.patente.codigo, req.body.qtd_estrela]
+                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5, now());', values: [req.body.codigo, req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo]
             }
             console.log(q);
 
@@ -148,7 +141,7 @@ sw.post('/insertjogador', function (req, res, next) {
                 } else {
 
                     console.log('retornou 201 no insert');
-                    res.status(201).send(req.body.nickname);//se não realizar o send nao finaliza o client
+                    res.status(201).send(req.body.nome); //Se não realizar o send não finaliza o client
                 }
             });
         }
@@ -166,8 +159,8 @@ sw.post('/updatejogador/', (req, res) => {
         } else {
 
             var q = {
-                text: 'update tb_jogador set data_nascimento = $1, senha = $2, qtd_estrela = $3, patente_codigo = $4 where nickname = $5',
-                values: [req.body.data_nascimento, req.body.senha, req.body.qtd_estrela, req.body.patente.codigo, req.body.nickname]
+                text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 	WHERE codigo = $5;',
+                values: [req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo, req.body.codigo]
             }
             console.log(q);
 
@@ -177,7 +170,7 @@ sw.post('/updatejogador/', (req, res) => {
                     console.log("Erro no updatejogador: " + err);
                     res.status(400).send('{' + err + '}');
                 } else {
-                    res.status(200).send(req.body.nickname);//se não realizar o send nao finaliza o client nao finaliza
+                    res.status(200).send(req.body.nome);//se não realizar o send nao finaliza o client nao finaliza
                 }
             });
         }
@@ -193,8 +186,8 @@ sw.get('/deletejogador/:nickname', (req, res) => {
         } else {
 
             var q = {
-                text: 'delete FROM tb_jogador where nickname = $1',
-                values: [req.params.nickname]
+                text:   'DELETE FROM tb_arma WHERE codigo = $1',
+                values: [req.params.codigo]
             }
 
             client.query(q, function (err, result) {
@@ -203,7 +196,7 @@ sw.get('/deletejogador/:nickname', (req, res) => {
                     console.log(err);
                     res.status(400).send('{' + err + '}');
                 } else {
-                    res.status(200).send({ 'nickname': req.params.nickname });//retorna o nickname deletado.
+                    res.status(200).send({ 'Nome da arma': req.params.nome });//retorna o nickname deletado.
                 }
 
             });
