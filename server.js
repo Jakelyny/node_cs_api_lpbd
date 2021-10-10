@@ -13,17 +13,17 @@ npm install --save express
 npm install --save pg
 */
 
-var express = require('express'); // Requisita a biblioteca para a criação dos serviços web.
-var pg = require("pg"); // Requisita a biblioteca pg para a comunicação com o banco de dados.
+var express = require('express'); //Requisita a biblioteca para a criação dos serviços web.
+var pg = require("pg"); //Requisita a biblioteca pg para a comunicação com o banco de dados.
 
-var sw = express(); //  Iniciliaza uma variavel chamada app que possitilitará a criação dos serviços e rotas.
+var sw = express(); //Iniciliaza uma variavel chamada app que possitilitará a criação dos serviços e rotas.
 
-sw.use(express.json());//  Padrao de mensagens em JSON.
+sw.use(express.json());//Padrao de mensagens em JSON.
 
-sw.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'GET,POST');
+sw.use(function (req, res, next) {      //Definições de termos de segurança
+    res.header('Access-Control-Allow-Origin', '*');  //Essa passagem do asterisco significa que vai permitir o acesso do serviço por qualquer outra fonte.
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');  //Ligações de cabeçalho
+    res.header('Access-Control-Allow-Methods', 'GET,POST');  //Permissão dos métodos, aqui no caso o GET e o POST
     next();
 });
 
