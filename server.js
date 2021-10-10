@@ -21,9 +21,9 @@ var sw = express(); //Iniciliaza uma variavel chamada app que possitilitará a c
 sw.use(express.json());//Padrao de mensagens em JSON.
 
 sw.use(function (req, res, next) {      //Definições de termos de segurança
-    res.header('Access-Control-Allow-Origin', '*');  //Essa passagem do asterisco significa que vai permitir o acesso do serviço por qualquer outra fonte.
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');  //Ligações de cabeçalho
-    res.header('Access-Control-Allow-Methods', 'GET,POST');  //Permissão dos métodos, aqui no caso o GET e o POST
+    res.header('Access-Control-Allow-Origin', '*');  //Essa passagem do asterisco significa que vai permitir o acesso do serviço por qualquer outra fonte por ser uma rede interna.
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');  //Ligações de cabeçalho.
+    res.header('Access-Control-Allow-Methods', 'GET,POST');  //Permissão dos métodos, aqui no caso o GET e o POST.
     next();
 });
 
@@ -35,10 +35,9 @@ const config = {
     port: 5432
 };
 
-//define conexao com o banco de dados.
-const postgres = new pg.Pool(config);
+const postgres = new pg.Pool(config);  //Define conexao com o banco de dados.
 
-sw.get('/listpatente', function (req, res) {
+sw.get('/listpatente', function (req, res) {  //Requisição e respostas
 
     postgres.connect(function (err, client, done) {
 
@@ -182,13 +181,12 @@ sw.get('/deletejogador/:nickname', (req, res) => {
 
 });
 
-
 //definicao do primeiro serviço web.
-sw.get('/', (req, res) => {
+sw.get('/', (req, res) => {                               
     res.send('Hello, world! meu primeiro teste.  #####');
 })
 
-
-sw.listen(4000, function () {
+//Inicialização do serviço utilizando a porta 4000.
+sw.listen(4000, function () {                             
     console.log('Server is running.. on Port 4000');
 });
