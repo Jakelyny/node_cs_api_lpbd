@@ -14,10 +14,6 @@
 </head>
 
 <body>
-    <audio preload="metadata" autoplay loop>
-        <source src="WoW-Vanilla to Shadowlands.mp3" type="audio/mpeg">
-        <source src="WoW-Vanilla to Shadowlands.ogg" type="audio/ogg">
-    </audio>
     <img src="img/banner.png" alt="Papel de parede com o símbolo das duas equipes">
     <div id="app" class="container">
         <div class="style">
@@ -123,7 +119,7 @@
 
         var dados = {
             //Opções cadastradas do select do tipo de armas
-            tipoArmass: [],
+            tipoArmas: [],
 
             //Opções cadastradas do select do tipo de munição
             municao: [],
@@ -306,14 +302,14 @@
 
                     this.errors = [];
                     //tratamento das informações corretadas
-                    if (this.nova_arma.codigoArma > 2 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoArmass.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
+                    if (this.nova_arma.codigoArmas > 2 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoArmas.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
 
                         return true;
                     }
                     this.errors = [];
 
                     //Possíveis mensagens de erro por tipo de input e tratamento
-                    if (this.nova_arma.codigoArma < 2) {
+                    if (this.nova_arma.codigoArmas < 2) {
                         this.errors.push('Código pequeno! Necessário acima de 2 dígitos.');
                     }
                     if (this.nova_arma.nome.trim().length < 2) {
@@ -325,7 +321,7 @@
                     if (isNaN(parseInt(this.nova_arma.municao.codigo))) {
                         this.errors.push('O tipo de munição é obrigatório.');
                     }
-                    if (isNaN(parseInt(this.nova_arma.tipoArmass.codigo))) {
+                    if (isNaN(parseInt(this.nova_arma.tipoArmas.codigo))) {
                         this.errors.push('O tipo de arma é obrigatório.');
                     }
 

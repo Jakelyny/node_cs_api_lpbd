@@ -104,7 +104,7 @@ sw.get('/listarma', function (req, res) {
         } else {
 
             client.query('SELECT a.codigo, a.nome, a.preco, t.nome, m.nome FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo', function (err, result) { //Comando SQL SELECT
-                
+
                 done();   //Encerrando conexão.
                 if (err) {
                     console.log(err);
@@ -182,7 +182,7 @@ sw.get('/deletearma/:codigo', (req, res) => {
 
     postgres.connect(function (err, client, done) {
         if (err) {
-            console.log("Não conseguiu acessar o serviço deletejogador!" + err);
+            console.log("Não conseguiu acessar o serviço deletearma!" + err);
             res.status(400).send('{' + err + '}');
         } else {
 
