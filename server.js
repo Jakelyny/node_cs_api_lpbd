@@ -163,7 +163,7 @@ sw.post('/updatearma/', (req, res) => {
                 text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 	WHERE codigo = $5',
                 values: [req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo, req.body.codigo]
             }
-            console.log(q);
+            //console.log(q);
 
             client.query(q, function (err, result) {
                 done();   //Encerrando conexão.
