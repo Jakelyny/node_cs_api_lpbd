@@ -157,7 +157,7 @@
                         };
 
                         //documentação sobre o parseInt https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
-                        if (isNaN(parseInt(this.novo_jogador.indice))) {
+                        if (isNaN(parseInt(this.nova_arma.indice))) {
 
                             this.$http.post('http://localhost:4000/insertarma', arma)
                                 .then(response => {
@@ -185,7 +185,6 @@
                                 .catch(error => {
                                     alert('Erro ao alterar a arma: ' + error);
                                 });
-
                         }
                         this.cleanFormulario();
                     } else {
@@ -239,7 +238,7 @@
 
                     this.errors = [];
                     //tratamento das informações corretadas
-                    if (this.nova_arma.codigoArmas > 2 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoarmas.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
+                    if (this.nova_arma.codigoArmas > 2 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoarma.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
 
                         return true;
                     }
@@ -258,7 +257,7 @@
                     if (isNaN(parseInt(this.nova_arma.municao.codigo))) {
                         this.errors.push('O tipo de munição é obrigatório.');
                     }
-                    if (isNaN(parseInt(this.nova_arma.tipoarmas.codigo))) {
+                    if (isNaN(parseInt(this.nova_arma.tipoarma.codigo))) {
                         this.errors.push('O tipo de arma é obrigatório.');
                     }
 

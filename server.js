@@ -128,8 +128,8 @@ sw.post('/insertarma', function (req, res, next) {
         } else {
 
             var q = {
-                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5, now())', 
-                values: [req.body.codigo, req.body.nome, req.body.preco, req.tipoarma.codigo, req.body.municao.codigo]
+                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5)', 
+                values: [req.body.codigo, req.body.nome, req.body.preco, req.body.tipoarma.codigo, req.body.municao.codigo]
             }
             console.log(q);
 
@@ -143,7 +143,7 @@ sw.post('/insertarma', function (req, res, next) {
                 } else {
 
                     console.log('retornou 201 no insert');
-                    res.status(201).send(req.body.codigo); //Se não realizar o send não finaliza o client
+                    res.status(201).send(req.body.nome); //Se não realizar o send não finaliza o client
                 }
             });
         }
@@ -162,7 +162,7 @@ sw.post('/updatearma/', (req, res) => {
 
             var q = {
                 text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 WHERE codigo = $5',
-                values: [req.body.nome, req.body.preco, req.tipoarma.codigo, req.body.municao.codigo, req.body.codigo]
+                values: [req.body.nome, req.body.preco, req.body.tipoarma.codigo, req.body.municao.codigo, req.body.codigo]
             }
             //console.log(q);
 
@@ -172,7 +172,7 @@ sw.post('/updatearma/', (req, res) => {
                     console.log("Erro no updatearma: " + err);
                     res.status(400).send('{' + err + '}');
                 } else {
-                    res.status(200).send(req.body.codigo);//se não realizar o send nao finaliza o client nao finaliza
+                    res.status(200).send(req.body.nome);//se não realizar o send nao finaliza o client nao finaliza
                 }
             });
         }
@@ -198,7 +198,7 @@ sw.get('/deletearma/:codigo', (req, res) => {
                     console.log(err);
                     res.status(400).send('{' + err + '}');
                 } else {
-                    res.status(200).send({ 'Código da arma': req.params.codigo });//retorna o nickname deletado.
+                    res.status(200).send({ 'Código da arma': req.params.nome });//retorna o nickname deletado.
                 }
 
             });
