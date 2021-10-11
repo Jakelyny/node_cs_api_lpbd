@@ -302,13 +302,13 @@
 
 
                 //requisitar o serviço /listtipoArmas     
-                this.$http.get('http://localhost:4000/listtipoArmas')
+                this.$http.get('http://localhost:4000/listtipoarmas')
 
                     .then(response => {
 
                         for (let t of response.data) {
 
-                            this.tipoArmass.push({
+                            this.tipoArmas.push({
                                 codigo: t.codigo,
                                 nome: t.nome
                             });
@@ -316,7 +316,7 @@
 
                     }).catch(response => {
                         // error callback
-                        alert('Não conectou no serviço: listtipoArmas');
+                        alert('Não conectou no serviço: listtipoarmas');
                         console.log(response);
                     });
 
@@ -328,7 +328,7 @@
                         for (let m of response.data) {
 
                             this.municao.push({
-                                codigo: t.codigo,
+                                codigo: m.codigo,
                                 nome: m.nome
                             });
                         }

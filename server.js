@@ -46,7 +46,7 @@ const config = {
 
 const postgres = new pg.Pool(config);  //Define conexao com o banco de dados.
 
-sw.get('/listtipoarma', function (req, res) {  //Requisição e respostas da listagem de tipo arma.
+sw.get('/listtipoarmas', function (req, res) {  //Requisição e respostas da listagem de tipo arma.
 
     postgres.connect(function (err, client, done) {  //Passagem de parâmetros de erros, comandos SQL e finalização do comando.
 
