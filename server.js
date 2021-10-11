@@ -78,6 +78,7 @@ sw.get('/listmunicao', function (req, res) {  //Requisição e respostas da list
             console.log("Não conseguiu acessar o BD :" + err);
             res.status(400).send('{' + err + '}');  //Passagem do protocolo HTTP 400 de erro.
         } else {
+
             client.query('SELECT m.codigo, m.nome FROM tb_municao m ORDER BY m.codigo', function (err, result) { //Comando SQL SELECT
                 done();   //Encerrando conexão.
                 if (err) {
@@ -86,7 +87,6 @@ sw.get('/listmunicao', function (req, res) {  //Requisição e respostas da list
                 } else {
                     res.status(200).send(result.rows);
                 }
-
             });
         }
     });
@@ -104,6 +104,7 @@ sw.get('/listarma', function (req, res) {
         } else {
 
             client.query('SELECT a.codigo, a.nome, a.preco, t.nome, m.nome FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo', function (err, result) { //Comando SQL SELECT
+                
                 done();   //Encerrando conexão.
                 if (err) {
                     console.log(err);
@@ -141,7 +142,7 @@ sw.post('/insertarma', function (req, res, next) {
                 } else {
 
                     console.log('retornou 201 no insert');
-                    res.status(201).send(req.body.nome); //Se não realizar o send não finaliza o client
+                    res.status(201).send(req.body.codigo); //Se não realizar o send não finaliza o client
                 }
             });
         }
@@ -170,7 +171,7 @@ sw.post('/updatearma/', (req, res) => {
                     console.log("Erro no updatearma: " + err);
                     res.status(400).send('{' + err + '}');
                 } else {
-                    res.status(200).send(req.body.nome);//se não realizar o send nao finaliza o client nao finaliza
+                    res.status(200).send(req.body.codigo);//se não realizar o send nao finaliza o client nao finaliza
                 }
             });
         }
@@ -181,7 +182,7 @@ sw.get('/deletearma/:codigo', (req, res) => {
 
     postgres.connect(function (err, client, done) {
         if (err) {
-            console.log("Não conseguiu acessar o serviço deletearma!" + err);
+            console.log("Não conseguiu acessar o serviço deletejogador!" + err);
             res.status(400).send('{' + err + '}');
         } else {
 
