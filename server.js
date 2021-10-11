@@ -128,7 +128,8 @@ sw.post('/insertarma', function (req, res, next) {
         } else {
 
             var q = {
-                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5, now())', values: [req.body.codigo, req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo]
+                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5, now())', 
+                values: [req.body.codigo, req.body.nome, req.body.preco, req.tipoarma.codigo, req.body.municao.codigo]
             }
             console.log(q);
 
@@ -160,8 +161,8 @@ sw.post('/updatearma/', (req, res) => {
         } else {
 
             var q = {
-                text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 	WHERE codigo = $5',
-                values: [req.body.nome, req.body.preco, req.tipoArmas.codigo, req.body.municao.codigo, req.body.codigo]
+                text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 WHERE codigo = $5',
+                values: [req.body.nome, req.body.preco, req.tipoarma.codigo, req.body.municao.codigo, req.body.codigo]
             }
             //console.log(q);
 

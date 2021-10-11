@@ -36,7 +36,7 @@
                         <td>{{a.codigo}}</td>
                         <td>{{a.nome}}</td>
                         <td>{{a.preco}}</td>
-                        <td>{{a.tipoArmas.nome}}</td>
+                        <td>{{a.tipoarma.nome}}</td>
                         <td>{{a.municao.nome}}</td>
                         <td><button @click.prevent="editArma(indice)" class="btn" type="button">Alterar</button></td>
                         <td><button @click.prevent="remArma(indice)" class="btn" type="button">Remover</button></td>
@@ -84,10 +84,10 @@
 
             <!-- Select do tipo de arma utilizando um v-for que percorrer entre as opções cadastradas utilizando o t-->
             <div class="form-group">
-                <label for="selecttipoArmass">Tipo de Arma:</label>
-                <select v-model="nova_arma.tipoArmas" class="form-control" id="selecttipoArmass" required>
+                <label for="selecttipoarma">Tipo de Arma:</label>
+                <select v-model="nova_arma.tipoarma" class="form-control" id="selecttipoarma" required>
                     <option disabled value="">Escolha um tipo</option>
-                    <option v-for="t in tipoArmas" v-bind:value="t">
+                    <option v-for="t in tipoarmas" v-bind:value="t">
                         {{ t.nome }}
                     </option>
                 </select>
@@ -98,7 +98,7 @@
                 <label for="selectMunicao">Munição:</label>
                 <select v-model="nova_arma.municao" class="form-control" id="selectMunicao" required>
                     <option disabled value="">Escolha um tipo</option>
-                    <option v-for="c in municao" v-bind:value="c">
+                    <option v-for="c in municoes" v-bind:value="c">
                         {{ c.nome }}
                     </option>
                 </select>
@@ -119,16 +119,16 @@
 
         var dados = {
             //Opções cadastradas do select do tipo de armas
-            tipoArmas: [],
+            tipoarmas: [],
 
             //Opções cadastradas do select do tipo de munição
-            municao: [],
+            municoes: [],
 
             //Utilizado para listar as armas na tabela HTML.
             armas: [],
 
             //Utilizado para os inputs do formulário
-            nova_arma: { indice: '', codigoArma: '', nome: '', preco: '', tipoArmas: {}, municao: {} },
+            nova_arma: { indice: '', codigoArma: '', nome: '', preco: '', tipoarma: {}, municao: {} },
 
             //Utilizado para os possíveis erros
             errors: []
@@ -152,7 +152,7 @@
                             codigo: this.nova_arma.codigo,
                             nome: this.nova_arma.nome.trim(),
                             preco: this.nova_arma.preco,
-                            tipoArmas: this.nova_arma.tipoArmas,
+                            tipoarma: this.nova_arma.tipoarma,
                             municao: this.nova_arma.municao
                         };
 
@@ -165,12 +165,12 @@
                                     this.armas.push(arma);
                                     alert('Inseriu a arma ' + response.data);
                                 })
-                                .catch(error => {
+                            .catch(error => {
 
-                                    alert('Erro ao inserir a arma: ' + error.response.data);
-                                    console.log(error);
+                                alert('Erro ao inserir a arma: ' + error.response.data);
+                                console.log(error);
 
-                                });
+                            });
 
                         } else {
 
@@ -199,7 +199,7 @@
                     this.nova_arma.codigoArma = this.armas[param_index].codigoArma;
                     this.nova_arma.nome = this.armas[param_index].nome;
                     this.nova_arma.preco = this.armas[param_index].preco;
-                    this.nova_arma.tipoArmas = this.armas[param_index].tipoArmas;
+                    this.nova_arma.tipoarma = this.armas[param_index].tipoarma;
                     this.nova_arma.municao = this.armas[param_index].municao;
                 },
 
@@ -231,7 +231,7 @@
                     this.nova_arma.codigoArma = '';
                     this.nova_arma.nome = '';
                     this.nova_arma.preco = '';
-                    this.nova_arma.tipoArmas = '';
+                    this.nova_arma.tipoarma = '';
                     this.nova_arma.municao = '';
                 },
 
@@ -239,7 +239,7 @@
 
                     this.errors = [];
                     //tratamento das informações corretadas
-                    if (this.nova_arma.codigoArmas > 2 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoArmas.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
+                    if (this.nova_arma.codigoArmas > 2 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoarmas.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
 
                         return true;
                     }
@@ -258,7 +258,7 @@
                     if (isNaN(parseInt(this.nova_arma.municao.codigo))) {
                         this.errors.push('O tipo de munição é obrigatório.');
                     }
-                    if (isNaN(parseInt(this.nova_arma.tipoArmas.codigo))) {
+                    if (isNaN(parseInt(this.nova_arma.tipoarmas.codigo))) {
                         this.errors.push('O tipo de arma é obrigatório.');
                     }
 
@@ -289,7 +289,7 @@
                                 codigo: a.codigo,
                                 nome: a.nome,
                                 preco: a.preco,
-                                tipoArmas: { codigo: a.codigo, nome: a.nome },
+                                tipoarma: { codigo: a.codigo, nome: a.nome },
                                 municao: { codigo: a.codigo, nome: a.nome }
                             });
                         }
@@ -301,14 +301,14 @@
                     });
 
 
-                //requisitar o serviço /listtipoArmas     
+                //requisitar o serviço /listtipoarmas     
                 this.$http.get('http://localhost:4000/listtipoarmas')
 
                     .then(response => {
 
                         for (let t of response.data) {
 
-                            this.tipoArmas.push({
+                            this.tipoarmas.push({
                                 codigo: t.codigo,
                                 nome: t.nome
                             });
@@ -327,7 +327,7 @@
 
                         for (let m of response.data) {
 
-                            this.municao.push({
+                            this.municoes.push({
                                 codigo: m.codigo,
                                 nome: m.nome
                             });
