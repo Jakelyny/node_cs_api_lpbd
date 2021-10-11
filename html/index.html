@@ -149,11 +149,11 @@
                     if (this.checkForm()) {
 
                         var arma = {
-                                    codigo: this.nova_arma.codigo,
-                                    nome: this.nova_arma.nome.trim(),
-                                    preco: this.nova_arma.preco,
-                                    tipoArmas: this.nova_arma.tipoArmas,
-                                    municao: this.nova_arma.municao
+                            codigo: this.nova_arma.codigo,
+                            nome: this.nova_arma.nome.trim(),
+                            preco: this.nova_arma.preco,
+                            tipoArmas: this.nova_arma.tipoArmas,
+                            municao: this.nova_arma.municao
                         };
 
                         //documentação sobre o parseInt https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
@@ -235,69 +235,6 @@
                     this.nova_arma.municao = '';
                 },
 
-                created: function () {
-
-                    this.$http.get('http://localhost:4000/listarma')
-
-                        .then(response => {
-
-                            for (let a of response.data) {
-
-                                this.armas.push({
-                                    codigo: a.codigo,
-                                    nome: a.nome,
-                                    preco: a.preco,
-                                    tipoArmas: {codigo: a.codigo, nome: a.nome},
-                                    municao: {codigo: a.codigo, nome: a.nome}
-                                });
-                            }
-
-                        }).catch(response => {
-                            // error callback
-                            alert('Não conectou no serviço: listarma');
-                            console.log(response);
-                        });
-
-
-                    //requisitar o serviço /listtipoArmas     
-                    this.$http.get('http://localhost:4000/listtipoArmas')
-
-                        .then(response => {
-
-                            for (let t of response.data) {
-
-                                this.tipoArmass.push({
-                                    codigo: t.codigo,
-                                    nome: t.nome
-                                });
-                            }
-
-                        }).catch(response => {
-                            // error callback
-                            alert('Não conectou no serviço: listtipoArmas');
-                            console.log(response);
-                        });
-
-                    //requisitar o serviço /listmunicao 
-                    this.$http.get('http://localhost:4000/listmunicao')
-
-                        .then(response => {
-
-                            for (let m of response.data) {
-
-                                this.municao.push({
-                                    codigo: t.codigo,
-                                    nome: m.nome
-                                });
-                            }
-
-                        }).catch(response => {
-                            // error callback
-                            alert('Não conectou no serviço: listmunicao');
-                            console.log(response);
-                        });
-                },
-
                 checkForm: function (e) {
 
                     this.errors = [];
@@ -340,6 +277,69 @@
                 },
 
             },
+
+            created: function () {
+
+                this.$http.get('http://localhost:4000/listarma')
+
+                    .then(response => {
+                        for (let a of response.data) {
+
+                            this.armas.push({
+                                codigo: a.codigo,
+                                nome: a.nome,
+                                preco: a.preco,
+                                tipoArmas: { codigo: a.codigo, nome: a.nome },
+                                municao: { codigo: a.codigo, nome: a.nome }
+                            });
+                        }
+
+                    }).catch(response => {
+                        // error callback
+                        alert('Não conectou no serviço: listarma');
+                        console.log(response);
+                    });
+
+
+                //requisitar o serviço /listtipoArmas     
+                this.$http.get('http://localhost:4000/listtipoArmas')
+
+                    .then(response => {
+
+                        for (let t of response.data) {
+
+                            this.tipoArmass.push({
+                                codigo: t.codigo,
+                                nome: t.nome
+                            });
+                        }
+
+                    }).catch(response => {
+                        // error callback
+                        alert('Não conectou no serviço: listtipoArmas');
+                        console.log(response);
+                    });
+
+                //requisitar o serviço /listmunicao 
+                this.$http.get('http://localhost:4000/listmunicao')
+
+                    .then(response => {
+
+                        for (let m of response.data) {
+
+                            this.municao.push({
+                                codigo: t.codigo,
+                                nome: m.nome
+                            });
+                        }
+
+                    }).catch(response => {
+                        // error callback
+                        alert('Não conectou no serviço: listmunicao');
+                        console.log(response);
+                    });
+            },
+
         });
     });
 
