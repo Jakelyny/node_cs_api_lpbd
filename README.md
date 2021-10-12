@@ -8,6 +8,3 @@
 * Remoção.
 
 ##### Tabela utilzada: tb_arma
-
-## Link da Tabela
-* 
