@@ -7,6 +7,10 @@
 * Alteração/Validação formulário;
 * Remoção.
 
-##### Tabela utilzada: tb_arma
+### Tabela utilzada: tb_arma
 
 ![image](https://user-images.githubusercontent.com/85123013/137013262-232798f6-1626-47bc-bfd7-62ab67d767f4.png)
+
+### Site em funcionamento com a tabela tb_arma
+
+![image](https://user-images.githubusercontent.com/85123013/137014237-553f228b-c008-4cb8-9bb1-8098ee5b51bf.png)
