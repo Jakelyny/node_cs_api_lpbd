@@ -14,13 +14,13 @@ npm install --save pg
 */
 
 //Requisita a biblioteca para a criação dos serviços web.
-var express = require('express'); 
+var express = require('express');
 
 //Requisita a biblioteca pg para a comunicação com o banco de dados.
-var pg = require("pg"); 
+var pg = require("pg");
 
 //Iniciliaza uma variavel chamada app que possitilitará a criação dos serviços e rotas.
-var sw = express(); 
+var sw = express();
 
 //Padrao de mensagens em JSON.
 sw.use(express.json());
@@ -28,11 +28,11 @@ sw.use(express.json());
 sw.use(function (req, res, next) {      //Definições de termos de segurança.
 
     //Essa passagem do asterisco significa que vai permitir o acesso do serviço por qualquer outra fonte por ser uma rede interna.
-    res.header('Access-Control-Allow-Origin', '*');  
+    res.header('Access-Control-Allow-Origin', '*');
     //Ligações de cabeçalho.
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');  
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     //Permissão dos métodos, aqui no caso o GET e o POST.
-    res.header('Access-Control-Allow-Methods', 'GET,POST');  
+    res.header('Access-Control-Allow-Methods', 'GET,POST');
     next();
 });
 
@@ -128,7 +128,7 @@ sw.post('/insertarma', function (req, res, next) {
         } else {
 
             var q = {
-                text:  'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5)', 
+                text: 'INSERT INTO tb_arma (codigo, nome, preco, tipoarma_codigo, municao_codigo) VALUES ($1,$2,$3,$4,$5)',
                 values: [req.body.codigo, req.body.nome, req.body.preco, req.body.tipoarma.codigo, req.body.municao.codigo]
             }
             console.log(q);
@@ -161,7 +161,7 @@ sw.post('/updatearma/', (req, res) => {
         } else {
 
             var q = {
-                text:  'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 WHERE codigo = $5',
+                text: 'UPDATE tb_arma SET nome = $1, preco = $2, tipoarma_codigo = $3, municao_codigo = $4 WHERE codigo = $5',
                 values: [req.body.nome, req.body.preco, req.body.tipoarma.codigo, req.body.municao.codigo, req.body.codigo]
             }
             //console.log(q);
@@ -188,7 +188,7 @@ sw.get('/deletearma/:codigo', (req, res) => {
         } else {
 
             var q = {
-                text:   'DELETE FROM tb_arma WHERE codigo = $1',
+                text: 'DELETE FROM tb_arma WHERE codigo = $1',
                 values: [req.params.codigo]
             }
 

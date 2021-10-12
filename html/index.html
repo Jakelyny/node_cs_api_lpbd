@@ -71,7 +71,7 @@
             <!-- Input do nome, no mínimo necessário inserir dois dígitos e no máximo 12, do tipo text pois existe nome de armas com números e letras-->
             <div class="form-group">
                 <label for="inputNome">Nome:</label>
-                <input type="text" minlength="2" maxlength="12" v-model="nova_arma.nome" class="form-control"
+                <input type="text" minlength="2" maxlength="20" v-model="nova_arma.nome" class="form-control"
                     id="inputNome" required placeholder="Ex: AK-47">
             </div>
 
@@ -145,9 +145,9 @@
 
                 addArma: function () {
 
-                    //para que possa prosseguir adicionando é necessário passartrue pelo checkForm
+                    //para que possa prosseguir adicionando é necessário passar true pelo checkForm
                     if (this.checkForm()) {
-                        alert("tá passando aqui?");
+
                         var arma = {
                             codigo: this.nova_arma.codigo,
                             nome: this.nova_arma.nome.trim(),
@@ -165,12 +165,12 @@
                                     this.armas.push(arma);
                                     alert('Inseriu a arma ' + response.data);
                                 })
-                            .catch(error => {
+                                .catch(error => {
 
-                                alert('Erro ao inserir a arma: ' + error.response.data);
-                                console.log(error);
+                                    alert('Erro ao inserir a arma: ' + error.response.data);
+                                    console.log(error);
 
-                            });
+                                });
 
                         } else {
 
