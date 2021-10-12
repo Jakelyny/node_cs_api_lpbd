@@ -8,3 +8,5 @@
 * Remoção.
 
 ##### Tabela utilzada: tb_arma
+
+![image](https://user-images.githubusercontent.com/85123013/137013262-232798f6-1626-47bc-bfd7-62ab67d767f4.png)
