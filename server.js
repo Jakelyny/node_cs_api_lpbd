@@ -92,7 +92,7 @@ sw.get('/listmunicao', function (req, res) {  //Requisição e respostas da list
     });
 });
 
-//definindo um serviço web, que estará acessível pelo endereço http://localhost:4000/listjogador
+//definindo um serviço web, que estará acessível pelo endereço http://localhost:4000/listarma
 sw.get('/listarma', function (req, res) {
 
     postgres.connect(function (err, client, done) {
