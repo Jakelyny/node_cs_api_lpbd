@@ -14,3 +14,7 @@
 ### Site em funcionamento com a tabela tb_arma do PostgresSQL
 
 ![image](https://user-images.githubusercontent.com/85123013/137014237-553f228b-c008-4cb8-9bb1-8098ee5b51bf.png)
+
+### Validação manual
+
+![image](https://user-images.githubusercontent.com/85123013/137016362-1894d507-dc2f-4530-b11e-7716e63a93aa.png)
