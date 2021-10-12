@@ -64,8 +64,8 @@
             <!-- Input do código, no mínimo necessário inserir dois dígitos e no máximo 5, do tipo number com uma verificação para não permitir a passagem de letras-->
             <div class="form-group">
                 <label for="inputCodigo">Código:</label>
-                <input type="text" minlength="2" maxlength="5" v-model="nova_arma.codigoArma" @input="checkCodigo"
-                    class="form-control" id="inputCodigoArma" required placeholder="Ex: 243">
+                <input type="text" minlength="1" maxlength="5" v-model="nova_arma.codigo" @input="checkCodigo"
+                    class="form-control" id="inputcodigo" required placeholder="Ex: 243">
             </div>
 
             <!-- Input do nome, no mínimo necessário inserir dois dígitos e no máximo 12, do tipo text pois existe nome de armas com números e letras-->
@@ -128,7 +128,7 @@
             armas: [],
 
             //Utilizado para os inputs do formulário
-            nova_arma: { indice: '', codigoArma: '', nome: '', preco: '', tipoarma: {}, municao: {} },
+            nova_arma: { indice: '', codigo: '', nome: '', preco: '', tipoarma: {}, municao: {} },
 
             //Utilizado para os possíveis erros
             errors: []
@@ -145,9 +145,9 @@
 
                 addArma: function () {
 
-                    //para que possa prosseguir adicoonando é necessário passartrue pelo checkForm
+                    //para que possa prosseguir adicionando é necessário passartrue pelo checkForm
                     if (this.checkForm()) {
-
+                        alert("tá passando aqui?");
                         var arma = {
                             codigo: this.nova_arma.codigo,
                             nome: this.nova_arma.nome.trim(),
@@ -195,7 +195,7 @@
                 editArma: function (param_index) {
 
                     this.nova_arma.indice = param_index;
-                    this.nova_arma.codigoArma = this.armas[param_index].codigoArma;
+                    this.nova_arma.codigo = this.armas[param_index].codigo;
                     this.nova_arma.nome = this.armas[param_index].nome;
                     this.nova_arma.preco = this.armas[param_index].preco;
                     this.nova_arma.tipoarma = this.armas[param_index].tipoarma;
@@ -227,7 +227,7 @@
                 cleanFormulario: function () {
 
                     this.nova_arma.indice = '';
-                    this.nova_arma.codigoArma = '';
+                    this.nova_arma.codigo = '';
                     this.nova_arma.nome = '';
                     this.nova_arma.preco = '';
                     this.nova_arma.tipoarma = '';
@@ -238,14 +238,14 @@
 
                     this.errors = [];
                     //tratamento das informações corretadas
-                    if (this.nova_arma.codigoArmas > 2 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoarma.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
+                    if (this.nova_arma.codigo > 1 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoarma.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
 
                         return true;
                     }
                     this.errors = [];
 
                     //Possíveis mensagens de erro por tipo de input e tratamento
-                    if (this.nova_arma.codigoArmas < 2) {
+                    if (this.nova_arma.codigo < 1) {
                         this.errors.push('Código pequeno! Necessário acima de 2 dígitos.');
                     }
                     if (this.nova_arma.nome.trim().length < 2) {
@@ -266,7 +266,7 @@
                 //função responsável em deixar somente a passagem de números...
                 checkCodigo: function (event) {
 
-                    this.nova_arma.codigoArma = this.nova_arma.codigoArma.replace(/[^0-9]/g, '');
+                    this.nova_arma.codigo = this.nova_arma.codigo.replace(/[^0-9]/g, '');
 
                 },
                 checkPreco: function (event) {
@@ -286,10 +286,10 @@
 
                             this.armas.push({
                                 codigo: a.codigo,
-                                nome: a.nome,
+                                nome: a.arma_nome,
                                 preco: a.preco,
-                                tipoarma: { codigo: a.codigo, nome: a.nome },
-                                municao: { codigo: a.codigo, nome: a.nome }
+                                tipoarma: { codigo: a.codigo, nome: a.nome_tipoarma },
+                                municao: { codigo: a.codigo, nome: a.nome_municao }
                             });
                         }
 

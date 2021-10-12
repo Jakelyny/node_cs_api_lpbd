@@ -103,7 +103,7 @@ sw.get('/listarma', function (req, res) {
             res.status(400).send('{' + err + '}');
         } else {
 
-            client.query('SELECT a.codigo, a.nome, a.preco, t.nome, m.nome FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo', function (err, result) { //Comando SQL SELECT
+            client.query('SELECT a.codigo, a.nome AS arma_nome, a.preco, t.nome AS nome_tipoarma, m.nome AS nome_municao FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo', function (err, result) { //Comando SQL SELECT
 
                 done();   //Encerrando conexão.
                 if (err) {
