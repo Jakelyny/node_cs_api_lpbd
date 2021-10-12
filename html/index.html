@@ -79,7 +79,7 @@
             <div class="form-group">
                 <label for="inputPreco">Preço:</label>
                 <input type="text" minlength="4" maxlength="10" v-model="nova_arma.preco" @input="checkPreco"
-                    class="form-control" id="inputPreco" required placeholder="Ex: 2700,00 (acima de R$200,00)">
+                    class="form-control" id="inputPreco" required placeholder="Ex: 2700.00 (acima de R$200.00)">
             </div>
 
             <!-- Select do tipo de arma utilizando um v-for que percorrer entre as opções cadastradas utilizando o t-->
@@ -238,7 +238,7 @@
 
                     this.errors = [];
                     //tratamento das informações corretadas
-                    if (this.nova_arma.codigo > 1 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199 && !isNaN(parseInt(this.nova_arma.tipoarma.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
+                    if (this.nova_arma.codigo > 1 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199.99 && !isNaN(parseInt(this.nova_arma.tipoarma.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
 
                         return true;
                     }
@@ -251,7 +251,7 @@
                     if (this.nova_arma.nome.trim().length < 2) {
                         this.errors.push('Nome da arma é obrigatório.');
                     }
-                    if (this.nova_arma.preco <= 199) {
+                    if (this.nova_arma.preco <= 199.99) {
                         this.errors.push('O preço precisa ser acima ou igual a R$200,00');
                     }
                     if (isNaN(parseInt(this.nova_arma.municao.codigo))) {
@@ -271,7 +271,7 @@
                 },
                 checkPreco: function (event) {
 
-                    this.nova_arma.preco = this.nova_arma.preco.replace(/[^0-9]/g, '');
+                    this.nova_arma.preco = this.nova_arma.preco.replace(/[^0-9.]/g, '').replace(/(\,*)\,/g, '$1');
 
                 },
 
