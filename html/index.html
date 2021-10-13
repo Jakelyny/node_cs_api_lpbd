@@ -238,7 +238,7 @@
 
                     this.errors = [];
                     //tratamento das informações corretadas
-                    if (this.nova_arma.codigo > 1 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199.99 && !isNaN(parseInt(this.nova_arma.tipoarma.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
+                    if (this.nova_arma.codigo >= 1 && this.nova_arma.nome.trim().length > 2 && this.nova_arma.preco >= 199.99 && !isNaN(parseInt(this.nova_arma.tipoarma.codigo)) && !isNaN(parseInt(this.nova_arma.municao.codigo))) {
 
                         return true;
                     }
@@ -246,7 +246,7 @@
 
                     //Possíveis mensagens de erro por tipo de input e tratamento
                     if (this.nova_arma.codigo < 1) {
-                        this.errors.push('Código pequeno! Necessário acima de 2 dígitos.');
+                        this.errors.push('Código pequeno! Necessário acima de 1 dígito.');
                     }
                     if (this.nova_arma.nome.trim().length < 2) {
                         this.errors.push('Nome da arma é obrigatório.');
@@ -288,8 +288,8 @@
                                 codigo: a.codigo,
                                 nome: a.arma_nome,
                                 preco: a.preco,
-                                tipoarma: { codigo: a.codigo, nome: a.nome_tipoarma },
-                                municao: { codigo: a.codigo, nome: a.nome_municao }
+                                tipoarma: { codigo: a.codigo_tipo_arma, nome: a.nome_tipoarma },
+                                municao: { codigo: a.codigo_municao, nome: a.nome_municao }
                             });
                         }
 

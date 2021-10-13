@@ -103,7 +103,7 @@ sw.get('/listarma', function (req, res) {
             res.status(400).send('{' + err + '}');
         } else {
 
-            client.query('SELECT a.codigo, a.nome AS arma_nome, a.preco, t.nome AS nome_tipoarma, m.nome AS nome_municao FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo', function (err, result) { //Comando SQL SELECT
+            client.query('SELECT a.codigo, a.nome AS arma_nome, a.preco, t.codigo AS codigo_tipo_arma, t.nome AS nome_tipoarma, m.codigo AS codigo_municao, m.nome AS nome_municao FROM tb_municao m INNER JOIN tb_arma a ON m.codigo = a.municao_codigo INNER JOIN tb_tipo_arma t ON t.codigo = a.tipoarma_codigo ORDER BY a.codigo', function (err, result) { //Comando SQL SELECT
 
                 done();   //Encerrando conexão.
                 if (err) {
@@ -198,7 +198,7 @@ sw.get('/deletearma/:codigo', (req, res) => {
                     console.log(err);
                     res.status(400).send('{' + err + '}');
                 } else {
-                    res.status(200).send({ 'Código da arma': req.params.nome });//retorna o nickname deletado.
+                    res.status(200).send({ 'codigo': req.params.codigo });//retorna o codigo deletado.
                 }
 
             });
